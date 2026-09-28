@@ -1,0 +1,35 @@
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: perfume_shop
+      MYSQL_USER: perfume
+      MYSQL_PASSWORD: perfume
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - perfume_mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: mysql
+      DB_URL: jdbc:mysql://db:3306/perfume_shop?createDatabaseIfNotExist=true&serverTimezone=Europe/Copenhagen
+      DB_USERNAME: perfume
+      DB_PASSWORD: perfume
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: change-this-password
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  perfume_mysql:

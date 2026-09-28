@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luksus Parfumer | Inspirationsdufte</title>
+<meta name="description" content="Eksklusive inspirationsdufte til hverdag, særlige øjeblikke og din personlige signatur.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" th:href="@{/css/site.css}">
+</head>
+<body>
+<header class="site-header">
+<a class="brand" th:href="@{/}"><span>♔</span>LUKSUS PARFUMER</a>
+<nav><a th:href="@{/catalog}">Kollektion</a><a th:href="@{/catalog(gender=MEN)}">Herrer</a><a th:href="@{/catalog(gender=WOMEN)}">Kvinder</a><a th:href="@{/catalog(gender=UNISEX)}">Unisex</a><a th:href="@{/cart}">Kurv</a></nav>
+</header>
+<main>
+<section class="hero">
+<div class="hero-glow"></div>
+<div class="hero-copy"><p class="eyebrow">EN DUFT. ET INDTRYK. EN SIGNATUR.</p><h1>Luksuriøse dufte til øjeblikke, der bliver husket.</h1><p>Opdag et kurateret univers af inspirationsdufte — fra rene hverdagsfavoritter til varme signaturdufte.</p><div class="hero-actions"><a class="button button-primary" th:href="@{/catalog}">Udforsk kollektionen</a><button class="button button-ghost" type="button" data-open-chat>Find din duft</button></div></div>
+<div class="hero-art"><div class="bottle bottle-left"><span>EXTRAIT</span></div><div class="bottle bottle-center"><span>LUXE</span></div><div class="bottle bottle-right"><span>PARFUM</span></div></div>
+</section>
+<section class="section">
+<div class="section-heading"><div><p class="eyebrow">UDVALGT TIL DIG</p><h2>Populære dufte</h2></div><a th:href="@{/catalog}">Se alle →</a></div>
+<div class="product-grid">
+<article class="product-card" th:each="perfume : ${featured}">
+<a th:href="@{'/perfumer/' + ${perfume.slug}}" class="product-visual"><div class="perfume-placeholder"><span th:text="${perfume.perfumeNumber}">001</span><strong th:text="${perfume.name}">Duft</strong></div></a>
+<div class="product-card-body"><p class="product-brand" th:text="${perfume.brand}">Brand</p><h3><a th:href="@{'/perfumer/' + ${perfume.slug}}" th:text="${perfume.name}">Parfume</a></h3><p th:text="${perfume.gender.displayName}">Unisex</p><div class="size-pills"><span th:each="size : ${perfume.sizes}" th:text="${size.ml + ' ml'}">30 ml</span></div></div>
+</article>
+</div>
+</section>
+<section class="collection-strip"><a th:href="@{/catalog}" class="collection-tile"><span>01</span><strong>Kontor & hverdag</strong><small>Ren. Elegant. Diskret.</small></a><a th:href="@{/catalog}" class="collection-tile"><span>02</span><strong>Sommer & ferie</strong><small>Friske og lette profiler.</small></a><a th:href="@{/catalog}" class="collection-tile"><span>03</span><strong>Date night</strong><small>Varme og tiltrækkende.</small></a><a th:href="@{/catalog}" class="collection-tile"><span>04</span><strong>Signature</strong><small>Karakterfulde favoritter.</small></a></section>
+<section class="assistant-banner"><div><p class="eyebrow">DUFTASSISTENT</p><h2>Ved du ikke, hvor du skal starte?</h2><p>Beskriv hvad du kan lide, årstiden eller anledningen. Assistenten søger i parfumedatabasen.</p></div><button class="button button-primary" type="button" data-open-chat>Åbn duftassistent</button></section>
+</main>
+<footer class="site-footer"><div><strong>LUKSUS PARFUMER</strong><p>Inspirationsdufte med fokus på præsentation, udvalg og personlig service.</p></div><div><strong>Shop</strong><a th:href="@{/catalog}">Alle dufte</a><a th:href="@{/cart}">Kurv</a></div><div><strong>Information</strong><p>Originale mærke- og produktnavne anvendes alene som duftreference. Ingen tilknytning til originalproducenterne.</p></div></footer>
+<div class="chat-widget" data-chat><button class="chat-launcher" type="button" data-open-chat aria-label="Åbn duftassistent">✦</button><div class="chat-panel" data-chat-panel hidden><div class="chat-header"><div><small>ONLINE</small><strong>Duftassistent</strong></div><button type="button" data-close-chat>×</button></div><div class="chat-messages" data-chat-messages><div class="chat-message bot">Fortæl mig hvad du søger — fx “en varm unisex duft til date night”.</div></div><div class="chat-suggestions"><button type="button" data-prompt="Find en sommerduft">Sommerduft</button><button type="button" data-prompt="Noget til date night">Date night</button><button type="button" data-prompt="Vis populære herredufte">Herredufte</button></div><form class="chat-form" data-chat-form><input name="q" placeholder="Skriv hvad du søger..." autocomplete="off"><button type="submit">Send</button></form></div></div>
+<script th:src="@{/js/site.js}" defer></script>
+</body></html>
