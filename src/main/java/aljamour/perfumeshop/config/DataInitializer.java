@@ -1,11 +1,15 @@
 package aljamour.perfumeshop.config;
 
-import aljamour.perfumeshop.model.*;
-import aljamour.perfumeshop.model.*;
+import aljamour.perfumeshop.model.Category;
+import aljamour.perfumeshop.model.NoteType;
+import aljamour.perfumeshop.model.Perfume;
+import aljamour.perfumeshop.model.PerfumeSize;
+import aljamour.perfumeshop.model.ScentNote;
 import aljamour.perfumeshop.repository.CategoryRepository;
 import aljamour.perfumeshop.repository.PerfumeRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -21,165 +25,118 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     @Override
+    @Transactional
     public void run(String... args) {
-        if (perfumeRepository.count() > 0) {
-            return;
+        Map<String, Category> categories = ensureCategories();
+
+        for (CatalogSeedData.ProductSeed seed : CatalogSeedData.products()) {
+            Perfume perfume = perfumeRepository.findByPerfumeNumber(seed.perfumeNumber())
+                    .orElseGet(() -> createPerfume(seed));
+
+            ensureSizes(perfume, seed.sizes());
+
+            if (perfume.getCategories().isEmpty()) {
+                seed.categorySlugs().forEach(slug -> {
+                    Category category = categories.get(slug);
+                    if (category != null) perfume.getCategories().add(category);
+                });
+            }
+
+            if (perfume.getScentNotes().isEmpty()) {
+                addKnownNotes(perfume, seed.perfumeNumber());
+            }
+
+            perfumeRepository.save(perfume);
         }
-
-        Map<String, Category> categories = new LinkedHashMap<>();
-        categories.put("popular", category("Mest populære", "popular", "Kundernes mest efterspurgte dufte."));
-        categories.put("office", category("Kontor & hverdag", "office", "Elegante og diskrete dufte til hverdagen."));
-        categories.put("summer", category("Sommer & ferie", "summer", "Friske og lette dufte til varme dage."));
-        categories.put("winter", category("Efterår & vinter", "winter", "Varme, dybe og omsluttende dufte."));
-        categories.put("date-night", category("Date night", "date-night", "Varme og sensuelle dufte til aftenen."));
-        categories.put("signature", category("Signature Collection", "signature", "Særlige dufte med markant karakter."));
-        categoryRepository.saveAll(categories.values());
-
-        save(perfume("001", "One Million", "Paco Rabanne", Gender.MEN, "one-million", true,
-                List.of("popular", "date-night"), List.of(15, 30, 70), categories,
-                notes("blodappelsin, grapefrugt, mynte", "rose, kanel", "læder, patchouli")));
-
-        save(perfume("002", "Acqua di Gio", "Giorgio Armani", Gender.MEN, "acqua-di-gio", true,
-                List.of("popular", "summer"), List.of(15, 30, 70), categories,
-                notes("bergamot, citrus", "marine noter", "cedertræ, patchouli")));
-
-        save(perfume("038", "Bleu de Chanel", "Chanel", Gender.MEN, "bleu-de-chanel", true,
-                List.of("popular", "office"), List.of(15, 30, 70), categories,
-                notes("citrus", "aromatiske noter", "trænoter")));
-
-        save(perfume("068", "Aventus", "Creed", Gender.MEN, "aventus", true,
-                List.of("popular", "signature"), List.of(15, 30, 70), categories,
-                notes("bergamot, ananas", "jasmin", "moskus, trænoter")));
-
-        save(perfume("079", "MYSLF", "Yves Saint Laurent", Gender.MEN, "myslf", true,
-                List.of("popular", "office"), List.of(15, 30, 70), categories,
-                notes("bergamot", "appelsinblomst", "trænoter")));
-
-        save(perfume("094", "Sauvage", "Christian Dior", Gender.MEN, "sauvage", true,
-                List.of("popular", "office"), List.of(15, 30, 70), categories,
-                notes("bergamot, peber", "lavendel", "ambroxan")));
-
-        save(perfume("140", "Éros", "Versace", Gender.MEN, "eros", true,
-                List.of("popular", "date-night"), List.of(15, 30, 70), categories,
-                notes("mynte, citrus", "tonkabønne", "vanilje, trænoter")));
-
-        save(perfume("162M", "Valentino Uomo Born In Roma Intense", "Valentino", Gender.MEN, "valentino-uomo-born-in-roma-intense", true,
-                List.of("popular", "date-night"), List.of(15, 30, 70), categories,
-                notes("vanilje", "lavendel", "vetiver")));
-
-        save(perfume("051", "Coco Mademoiselle", "Chanel", Gender.WOMEN, "coco-mademoiselle", true,
-                List.of("popular", "office"), List.of(15, 30, 70), categories,
-                notes("citrus", "rose, jasmin", "patchouli, vanilje")));
-
-        save(perfume("080", "Sì", "Giorgio Armani", Gender.WOMEN, "si", true,
-                List.of("popular", "office"), List.of(15, 30, 70), categories,
-                notes("solbær", "rose", "vanilje, patchouli")));
-
-        save(perfume("085", "Chance", "Chanel", Gender.WOMEN, "chance", false,
-                List.of("office"), List.of(15, 30, 70), categories,
-                notes("citrus, peber", "jasmin", "patchouli")));
-
-        save(perfume("089", "Mon Paris", "Yves Saint Laurent", Gender.WOMEN, "mon-paris", true,
-                List.of("popular", "date-night"), List.of(15, 30, 70), categories,
-                notes("frugtige noter", "jasmin", "patchouli, moskus")));
-
-        save(perfume("090", "Poison Girl", "Christian Dior", Gender.WOMEN, "poison-girl", true,
-                List.of("popular", "date-night"), List.of(15, 30, 70), categories,
-                notes("citrus", "rose", "vanilje, tonkabønne")));
-
-        save(perfume("122", "Libre", "Yves Saint Laurent", Gender.WOMEN, "libre", true,
-                List.of("popular", "signature"), List.of(15, 30, 70), categories,
-                notes("lavendel, citrus", "appelsinblomst", "vanilje, cedertræ")));
-
-        save(perfume("131", "Good Girl", "Carolina Herrera", Gender.WOMEN, "good-girl", true,
-                List.of("popular", "date-night"), List.of(15, 30, 70), categories,
-                notes("mandel", "jasmin", "tonkabønne, kakao")));
-
-        save(perfume("112", "Neroli Portofino", "Tom Ford", Gender.UNISEX, "neroli-portofino", false,
-                List.of("summer"), List.of(15, 50), categories,
-                notes("bergamot, citrus", "neroli", "rav")));
-
-        save(perfume("114", "Ombre Nomade", "Louis Vuitton", Gender.UNISEX, "ombre-nomade", true,
-                List.of("signature", "winter"), List.of(15, 30, 70), categories,
-                notes("røgelse", "oud", "hindbær, trænoter")));
-
-        save(perfume("118", "Baccarat Rouge 540", "Maison Francis Kurkdjian", Gender.UNISEX, "baccarat-rouge-540", true,
-                List.of("signature", "date-night"), List.of(15, 50), categories,
-                notes("safran", "jasmin", "rav, cedertræ")));
-
-        save(perfume("127", "Oud Wood", "Tom Ford", Gender.UNISEX, "oud-wood", true,
-                List.of("office", "winter", "signature"), List.of(15, 50), categories,
-                notes("krydderier", "oud, sandeltræ", "rav, vanilje")));
-
-        save(perfume("129", "Erba Pura", "Xerjoff", Gender.UNISEX, "erba-pura", true,
-                List.of("summer", "signature"), List.of(15, 50), categories,
-                notes("citrus", "frugtige noter", "moskus, vanilje")));
-
-        save(perfume("143", "Vanille Powder", "Matière Première", Gender.UNISEX, "vanille-powder", false,
-                List.of("winter", "date-night"), List.of(15, 50), categories,
-                notes("kokos", "vanilje", "moskus")));
-
-        save(perfume("117", "Tobacco Vanille", "Tom Ford", Gender.UNISEX, "tobacco-vanille", true,
-                List.of("winter", "date-night"), List.of(15, 50), categories,
-                notes("tobaksblade, krydderier", "tonkabønne", "vanilje, kakao")));
-
-        save(perfume("111", "Lost Cherry", "Tom Ford", Gender.UNISEX, "lost-cherry", true,
-                List.of("date-night", "signature"), List.of(15, 50), categories,
-                notes("kirsebær", "mandel", "vanilje, trænoter")));
-
-        save(perfume("144", "Bianco Latte", "Giardini di Toscana", Gender.UNISEX, "bianco-latte", true,
-                List.of("winter", "date-night"), List.of(15, 50), categories,
-                notes("karamel", "honning", "vanilje, moskus")));
-
-        save(perfume("146", "Balmain Rouge", "Pierre Balmain", Gender.UNISEX, "balmain-rouge", false,
-                List.of("signature"), List.of(15, 50), categories,
-                notes("frugtige noter", "blomster", "trænoter")));
     }
 
-    private Category category(String name, String slug, String description) {
-        Category category = new Category();
-        category.setName(name);
-        category.setSlug(slug);
-        category.setDescription(description);
-        return category;
+    private Map<String, Category> ensureCategories() {
+        Map<String, String[]> definitions = new LinkedHashMap<>();
+        definitions.put("popular", new String[]{"Mest populære", "Kundernes mest efterspurgte dufte."});
+        definitions.put("office", new String[]{"Kontor & hverdag", "Elegante og diskrete dufte til hverdagen."});
+        definitions.put("summer", new String[]{"Sommer & ferie", "Friske og lette dufte til varme dage."});
+        definitions.put("winter", new String[]{"Efterår & vinter", "Varme, dybe og omsluttende dufte."});
+        definitions.put("date-night", new String[]{"Date night", "Varme og sensuelle dufte til aftenen."});
+        definitions.put("signature", new String[]{"Signature Collection", "Særlige dufte med markant karakter."});
+
+        Map<String, Category> result = new LinkedHashMap<>();
+
+        definitions.forEach((slug, values) -> {
+            Category category = categoryRepository.findBySlug(slug).orElseGet(() -> {
+                Category created = new Category();
+                created.setName(values[0]);
+                created.setSlug(slug);
+                created.setDescription(values[1]);
+                return categoryRepository.save(created);
+            });
+            result.put(slug, category);
+        });
+
+        return result;
     }
 
-    private Perfume perfume(
-            String number,
-            String name,
-            String brand,
-            Gender gender,
-            String slug,
-            boolean featured,
-            List<String> categorySlugs,
-            List<Integer> sizes,
-            Map<String, Category> categories,
-            Map<NoteType, List<String>> notes
-    ) {
+    private Perfume createPerfume(CatalogSeedData.ProductSeed seed) {
         Perfume perfume = new Perfume();
-        perfume.setPerfumeNumber(number);
-        perfume.setName(name);
-        perfume.setBrand(brand);
-        perfume.setGender(gender);
-        perfume.setInspiredBy(name + " by " + brand);
-        perfume.setSlug(slug);
-        perfume.setShortDescription("En elegant inspirationsduft med karakter og en luksuriøs profil.");
-        perfume.setDescription("Denne duft er en inspirationsduft med reference til den angivne original. Varemærker og produktnavne bruges alene som duftreference; butikken er ikke tilknyttet de originale producenter.");
+        perfume.setPerfumeNumber(seed.perfumeNumber());
+        perfume.setName(seed.name());
+        perfume.setBrand(seed.brand());
+        perfume.setGender(seed.gender());
+        perfume.setInspiredBy(seed.name() + " by " + seed.brand());
+        perfume.setSlug(seed.slug());
+        perfume.setShortDescription("En inspirationsduft med reference til " + seed.name() + ".");
+        perfume.setDescription("Originale mærke- og produktnavne anvendes alene som duftreference. Produktet er en inspirationsduft og butikken er ikke tilknyttet den originale producent.");
         perfume.setActive(true);
-        perfume.setFeatured(featured);
+        perfume.setFeatured(seed.featured());
         perfume.setNeedsReview(false);
+        return perfume;
+    }
 
-        categorySlugs.forEach(slugValue -> perfume.getCategories().add(categories.get(slugValue)));
+    private void ensureSizes(Perfume perfume, List<Integer> wantedSizes) {
+        Set<Integer> existing = new HashSet<>();
+        perfume.getSizes().forEach(size -> existing.add(size.getMl()));
 
-        for (Integer ml : sizes) {
-            PerfumeSize size = new PerfumeSize();
-            size.setMl(ml);
-            size.setType("Extrait de Parfum");
-            size.setActive(true);
-            size.setStockQuantity(0);
-            size.setSellingPrice(null);
-            perfume.addSize(size);
-        }
+        wantedSizes.stream()
+                .filter(ml -> !existing.contains(ml))
+                .forEach(ml -> {
+                    PerfumeSize size = new PerfumeSize();
+                    size.setMl(ml);
+                    size.setType("Extrait de Parfum");
+                    size.setActive(true);
+                    size.setStockQuantity(0);
+                    size.setSellingPrice(null);
+                    perfume.addSize(size);
+                });
+    }
+
+    private void addKnownNotes(Perfume perfume, String perfumeNumber) {
+        Map<NoteType, List<String>> notes = switch (perfumeNumber) {
+            case "001" -> notes("blodappelsin, grapefrugt, mynte", "rose, kanel", "læder, patchouli");
+            case "002" -> notes("bergamot, citrus", "marine noter", "cedertræ, patchouli");
+            case "038" -> notes("citrus", "aromatiske noter", "trænoter");
+            case "068" -> notes("bergamot, ananas", "jasmin", "moskus, trænoter");
+            case "079" -> notes("bergamot", "appelsinblomst", "trænoter");
+            case "094" -> notes("bergamot, peber", "lavendel", "ambroxan");
+            case "140" -> notes("mynte, citrus", "tonkabønne", "vanilje, trænoter");
+            case "162M" -> notes("vanilje", "lavendel", "vetiver");
+            case "051" -> notes("citrus", "rose, jasmin", "patchouli, vanilje");
+            case "080" -> notes("solbær", "rose", "vanilje, patchouli");
+            case "085" -> notes("citrus, peber", "jasmin", "patchouli");
+            case "089" -> notes("frugtige noter", "jasmin", "patchouli, moskus");
+            case "090" -> notes("citrus", "rose", "vanilje, tonkabønne");
+            case "122" -> notes("lavendel, citrus", "appelsinblomst", "vanilje, cedertræ");
+            case "131" -> notes("mandel", "jasmin", "tonkabønne, kakao");
+            case "112" -> notes("bergamot, citrus", "neroli", "rav");
+            case "114" -> notes("røgelse", "oud", "hindbær, trænoter");
+            case "118" -> notes("safran", "jasmin", "rav, cedertræ");
+            case "127" -> notes("krydderier", "oud, sandeltræ", "rav, vanilje");
+            case "129" -> notes("citrus", "frugtige noter", "moskus, vanilje");
+            case "143" -> notes("kokos", "vanilje", "moskus");
+            case "117" -> notes("tobaksblade, krydderier", "tonkabønne", "vanilje, kakao");
+            case "111" -> notes("kirsebær", "mandel", "vanilje, trænoter");
+            case "144" -> notes("karamel", "honning", "vanilje, moskus");
+            case "146" -> notes("frugtige noter", "blomster", "trænoter");
+            default -> Map.of();
+        };
 
         notes.forEach((type, values) -> values.forEach(value -> {
             ScentNote note = new ScentNote();
@@ -187,8 +144,6 @@ public class DataInitializer implements CommandLineRunner {
             note.setNoteName(value);
             perfume.addScentNote(note);
         }));
-
-        return perfume;
     }
 
     private Map<NoteType, List<String>> notes(String top, String heart, String base) {
@@ -204,9 +159,5 @@ public class DataInitializer implements CommandLineRunner {
                 .map(String::trim)
                 .filter(s -> !s.isBlank())
                 .toList();
-    }
-
-    private void save(Perfume perfume) {
-        perfumeRepository.save(perfume);
     }
 }
