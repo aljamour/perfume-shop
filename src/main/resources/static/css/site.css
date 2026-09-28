@@ -173,3 +173,54 @@ td strong,td small{display:block}
 .add-size-form input{padding:11px;border:1px solid #ddd}
 @media(max-width:1100px){.product-grid{grid-template-columns:repeat(3,1fr)}.hero{grid-template-columns:1fr;min-height:auto}.hero-art{height:420px}.detail-layout{grid-template-columns:1fr}.detail-visual{position:relative;top:auto;min-height:560px}.checkout-grid{grid-template-columns:1fr}.collection-strip{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:760px){.site-header{height:auto;padding:18px 20px;align-items:flex-start;gap:18px}.site-header nav{gap:12px;flex-wrap:wrap;justify-content:flex-end}.site-header nav a:nth-child(2),.site-header nav a:nth-child(3),.site-header nav a:nth-child(4){display:none}.brand{font-size:17px}.hero{padding:70px 22px}.hero-art{height:330px;gap:8px}.bottle{width:92px}.bottle-left{height:210px}.bottle-center{height:290px}.bottle-right{height:230px}.bottle:before{height:48px;top:-40px}.product-grid{grid-template-columns:repeat(2,1fr);gap:10px}.product-visual{height:230px}.perfume-placeholder{width:105px;height:155px}.perfume-placeholder strong{font-size:17px}.product-card-body{padding:14px}.collection-strip{grid-template-columns:1fr}.assistant-banner{margin:40px 16px;padding:34px;display:block}.assistant-banner .button{margin-top:18px}.site-footer{grid-template-columns:1fr}.catalog-toolbar{grid-template-columns:1fr}.notes{grid-template-columns:1fr}.size-buy-row{grid-template-columns:1fr auto}.size-buy-row .button{grid-column:1/-1}.cart-line{grid-template-columns:1fr auto}.cart-line>strong{grid-column:2}.form-grid{grid-template-columns:1fr}.stat-grid{grid-template-columns:1fr}.admin-size-row{grid-template-columns:1fr}.inline-size-form{grid-template-columns:1fr 1fr}.inline-size-form .button{grid-column:1/-1}.page-shell,.section,.admin-shell{padding:60px 18px}}
+
+
+/* Interactive catalog — inspired by the printed perfume catalogue */
+.catalog-page{max-width:1600px;margin:0 auto;padding-bottom:100px}
+.catalog-cover{min-height:430px;padding:80px clamp(24px,7vw,110px);display:grid;grid-template-columns:1.4fr .6fr;align-items:end;gap:60px;background:linear-gradient(125deg,#14130f 0%,#242019 58%,#8c7248 150%);color:#f8f3e9;position:relative;overflow:hidden}
+.catalog-cover:before{content:"";position:absolute;width:520px;height:520px;border:1px solid rgba(216,192,146,.18);border-radius:50%;right:-160px;top:-220px}
+.catalog-cover h1{font-size:clamp(58px,7vw,98px);max-width:900px;font-weight:600;letter-spacing:-.035em}
+.catalog-cover p:not(.eyebrow){max-width:760px;color:#c9c0b3}
+.catalog-cover-mark{justify-self:end;text-align:right;display:flex;flex-direction:column;position:relative;z-index:2}
+.catalog-cover-mark span{font-size:9px;letter-spacing:.35em;color:var(--gold-soft)}
+.catalog-cover-mark strong{font-family:"Cormorant Garamond",serif;font-size:90px;font-weight:500;line-height:.9;color:#ead9b8}
+.catalog-controls{padding:28px clamp(22px,5vw,70px) 0}
+.catalog-reset{font-size:11px;text-transform:uppercase;letter-spacing:.12em;text-decoration:underline;color:var(--muted)}
+.catalog-section{padding:84px clamp(22px,5vw,70px) 10px}
+.catalog-section+.catalog-section{border-top:1px solid var(--line)}
+.catalog-section-heading{display:grid;grid-template-columns:minmax(0,1fr) 1fr;gap:40px;align-items:end;margin-bottom:36px}
+.catalog-section-heading>div{position:relative;padding-left:64px}
+.catalog-section-number{position:absolute;left:0;top:4px;font-family:"Cormorant Garamond",serif;font-size:38px;color:var(--gold);line-height:1}
+.catalog-section-heading h2{font-size:clamp(44px,5vw,72px);font-weight:600}
+.catalog-section-heading p:not(.eyebrow){color:var(--muted);max-width:620px;margin-bottom:0}
+.catalog-rule{display:block;height:1px;background:linear-gradient(90deg,var(--gold),transparent)}
+.catalog-product-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.catalog-product{display:grid;grid-template-columns:minmax(180px,.9fr) minmax(0,1.15fr);min-height:330px;background:#fff;border:1px solid var(--line);transition:.24s}
+.catalog-product:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.catalog-product-visual{display:grid;place-items:center;min-height:330px;background:linear-gradient(145deg,#eee5d7,#d2bea0);overflow:hidden}
+.catalog-bottle{width:120px;height:190px;background:linear-gradient(145deg,#fffdf8,#d8c6a8);border:1px solid rgba(77,58,31,.18);border-radius:7px 7px 18px 18px;box-shadow:0 24px 45px rgba(52,39,20,.22);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px;position:relative}
+.catalog-bottle:before{content:"";position:absolute;top:-27px;width:58px;height:31px;background:#181611;border-radius:3px 3px 0 0}
+.catalog-bottle small{font-size:9px;letter-spacing:.2em;color:var(--gold)}
+.catalog-bottle strong{font-family:"Cormorant Garamond",serif;font-size:21px;line-height:1.05;margin:12px 0}
+.catalog-bottle span{font-size:7px;letter-spacing:.19em;color:#766a59}
+.catalog-product-copy{padding:24px;display:flex;flex-direction:column}
+.catalog-product-topline{display:flex;justify-content:space-between;gap:12px;align-items:start}
+.catalog-product-topline>span{font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+.catalog-product h3{font-size:31px;margin:3px 0 12px}
+.catalog-note-preview{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.catalog-note-preview span{font-size:9px;padding:5px 7px;background:#f0eadf;color:#6b6256}
+.catalog-sizes{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+.catalog-sizes span{font-size:9px;border:1px solid var(--line);padding:5px 7px;color:#655e54}
+.catalog-card-actions{margin-top:18px;padding-top:16px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.catalog-details-link{font-size:10px;text-transform:uppercase;letter-spacing:.13em;font-weight:700}
+.catalog-quick-buy{display:grid;grid-template-columns:1fr auto;gap:7px}
+.catalog-quick-buy select{min-width:0;border:1px solid var(--line);background:#fbfaf7;padding:9px;font-size:10px}
+.catalog-quick-buy button{border:0;background:var(--ink);color:#fff;padding:9px 12px;text-transform:uppercase;letter-spacing:.1em;font-size:9px}
+.catalog-price-pending{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:#968c7e}
+.catalog-all-products{margin-top:80px;background:#efe8dc}
+.catalog-product-compact{min-height:290px}
+.catalog-product-compact .catalog-product-visual{min-height:290px;background:linear-gradient(145deg,#f5eee3,#dccdb7)}
+.catalog-product-compact .catalog-bottle{width:105px;height:165px}
+@media(max-width:1250px){.catalog-product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:840px){.catalog-cover{grid-template-columns:1fr;min-height:520px}.catalog-cover-mark{justify-self:start;text-align:left}.catalog-cover-mark strong{font-size:70px}.catalog-section-heading{grid-template-columns:1fr}.catalog-rule{display:none}.catalog-product-grid{grid-template-columns:1fr}}
+@media(max-width:560px){.catalog-cover{padding:64px 20px}.catalog-product{grid-template-columns:130px 1fr;min-height:270px}.catalog-product-visual,.catalog-product-compact .catalog-product-visual{min-height:270px}.catalog-bottle{width:88px;height:145px}.catalog-bottle strong{font-size:16px}.catalog-product-copy{padding:17px}.catalog-product h3{font-size:25px}.catalog-section-heading>div{padding-left:48px}.catalog-section-number{font-size:30px}.catalog-quick-buy{grid-template-columns:1fr}.catalog-quick-buy button{min-height:38px}}
