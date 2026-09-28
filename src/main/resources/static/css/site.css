@@ -1,0 +1,175 @@
+:root{
+  --ink:#11100d;
+  --paper:#f7f3eb;
+  --paper-2:#eee7da;
+  --gold:#b99047;
+  --gold-soft:#d8c092;
+  --muted:#7b7469;
+  --line:rgba(17,16,13,.13);
+  --white:#fff;
+  --shadow:0 24px 70px rgba(17,16,13,.12);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Manrope,Arial,sans-serif;line-height:1.6}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.site-header,.admin-header{height:82px;padding:0 clamp(20px,5vw,72px);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:rgba(247,243,235,.94);backdrop-filter:blur(16px);position:sticky;top:0;z-index:30}
+.site-header nav{display:flex;gap:28px;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.site-header nav a{position:relative}
+.site-header nav a:after{content:"";position:absolute;left:0;right:100%;bottom:-6px;height:1px;background:var(--gold);transition:.25s}
+.site-header nav a:hover:after{right:0}
+.brand{font-family:"Cormorant Garamond",serif;font-weight:700;letter-spacing:.14em;font-size:22px;display:flex;align-items:center;gap:10px}
+.brand span{color:var(--gold);font-size:25px}
+.hero{min-height:720px;padding:80px clamp(24px,7vw,110px);display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:70px;position:relative;overflow:hidden;background:linear-gradient(125deg,#f8f5ef 0%,#efe5d4 58%,#d6c2a1 100%)}
+.hero:before{content:"";position:absolute;width:520px;height:520px;border:1px solid rgba(185,144,71,.28);border-radius:50%;right:-150px;top:-180px}
+.hero-glow{position:absolute;width:360px;height:360px;background:radial-gradient(circle,rgba(255,255,255,.75),transparent 68%);right:18%;top:28%;filter:blur(8px)}
+.hero-copy{position:relative;z-index:2;max-width:760px}
+.eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:700;margin:0 0 14px}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;line-height:1.04;margin:0}
+.hero h1{font-size:clamp(56px,7vw,96px);font-weight:600;letter-spacing:-.035em;max-width:900px}
+.hero-copy>p:not(.eyebrow){font-size:17px;color:#4e493f;max-width:620px;margin:28px 0}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+.button{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;border:1px solid transparent;border-radius:0;letter-spacing:.08em;text-transform:uppercase;font-size:11px;font-weight:700;transition:.22s}
+.button-primary{background:var(--ink);color:var(--white)}
+.button-primary:hover{background:#2d2921;transform:translateY(-1px)}
+.button-ghost{background:transparent;border-color:rgba(17,16,13,.4);color:var(--ink)}
+.button-dark{background:#28251f;color:#fff;border:0}
+.hero-art{height:520px;display:flex;align-items:flex-end;justify-content:center;gap:20px;position:relative;z-index:2}
+.bottle{width:150px;border-radius:14px 14px 28px 28px;display:flex;align-items:center;justify-content:center;box-shadow:0 34px 60px rgba(35,27,17,.28),inset 0 0 0 1px rgba(255,255,255,.42);position:relative;font-family:"Cormorant Garamond",serif;letter-spacing:.12em}
+.bottle:before{content:"";position:absolute;width:72%;height:72px;top:-58px;background:#171611;border-radius:7px 7px 2px 2px}
+.bottle-left{height:330px;background:linear-gradient(145deg,#efe8db,#c6b49d);transform:rotate(-4deg);color:#6b5435}
+.bottle-center{height:440px;background:linear-gradient(145deg,#2a6f70,#082d35);color:#f3e5c8}
+.bottle-right{height:355px;background:linear-gradient(145deg,#2b2725,#0b0b0b);transform:rotate(4deg);color:#c7a36a}
+.section,.page-shell,.admin-shell{max-width:1440px;margin:0 auto;padding:100px clamp(22px,5vw,70px)}
+.section-heading,.admin-title,.panel-heading{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:34px}
+.section-heading h2,.page-intro h1,.detail-copy h1,.admin-title h1,.login-card h1,.success-page h1{font-size:clamp(42px,5vw,68px);font-weight:600}
+.section-heading>a{font-size:12px;text-transform:uppercase;letter-spacing:.14em;border-bottom:1px solid var(--ink)}
+.product-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+.product-card{background:rgba(255,255,255,.5);border:1px solid var(--line);transition:.25s;min-width:0}
+.product-card:hover{transform:translateY(-5px);box-shadow:var(--shadow);background:#fff}
+.product-visual{height:320px;display:grid;place-items:center;background:linear-gradient(150deg,#f0e9dd,#d8c9b1);overflow:hidden}
+.perfume-placeholder{width:145px;height:205px;background:linear-gradient(145deg,rgba(255,255,255,.92),rgba(217,202,178,.82));border:1px solid rgba(113,91,53,.2);border-radius:8px 8px 18px 18px;box-shadow:0 20px 40px rgba(61,46,25,.18);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px;position:relative}
+.perfume-placeholder:before{content:"";position:absolute;top:-27px;width:62px;height:31px;background:#25221d;border-radius:3px 3px 0 0}
+.perfume-placeholder span{font-size:10px;letter-spacing:.18em;color:var(--gold)}
+.perfume-placeholder strong{font-family:"Cormorant Garamond",serif;font-size:22px;line-height:1;margin-top:12px}
+.product-card-body{padding:22px}
+.product-brand{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin:0 0 6px}
+.product-card h3{font-size:28px;font-weight:600;margin-bottom:8px}
+.product-card-body>p:not(.product-brand){font-size:12px;color:var(--muted)}
+.size-pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.size-pills span,.mini-pill{font-size:10px;border:1px solid var(--line);padding:5px 8px;background:#fff}
+.collection-strip{display:grid;grid-template-columns:repeat(4,1fr);background:#14130f;color:#f7f2e8}
+.collection-tile{padding:54px 34px;border-right:1px solid rgba(255,255,255,.12);display:flex;flex-direction:column;min-height:220px;transition:.22s}
+.collection-tile:hover{background:#201d17}
+.collection-tile span{color:var(--gold);font-size:11px;letter-spacing:.2em}
+.collection-tile strong{font-family:"Cormorant Garamond",serif;font-size:31px;margin:auto 0 4px}
+.collection-tile small{color:#aaa298}
+.assistant-banner{margin:90px auto;max-width:1300px;background:#e8dcc8;padding:60px;display:flex;align-items:center;justify-content:space-between;gap:40px}
+.assistant-banner h2{font-size:52px}
+.assistant-banner p:not(.eyebrow){color:#5e564b;max-width:720px}
+.site-footer{background:#0f0e0c;color:#ddd4c7;padding:70px clamp(24px,6vw,90px);display:grid;grid-template-columns:2fr 1fr 2fr;gap:50px}
+.site-footer>div{display:flex;flex-direction:column;gap:10px}
+.site-footer strong{font-family:"Cormorant Garamond",serif;font-size:23px;color:#fff}
+.site-footer p,.site-footer a{font-size:12px;color:#9e978c;max-width:520px}
+.page-intro{max-width:850px;margin-bottom:42px}
+.page-intro p:not(.eyebrow){color:var(--muted);max-width:650px}
+.catalog-toolbar{display:grid;grid-template-columns:1fr 220px auto;gap:12px;margin-bottom:34px}
+.catalog-toolbar input,.catalog-toolbar select,.lux-form input,.lux-form select,.lux-form textarea,.qty{border:1px solid var(--line);background:#fff;padding:13px 15px;outline:none}
+.catalog-toolbar input:focus,.lux-form input:focus,.lux-form textarea:focus{border-color:var(--gold)}
+.empty-state{padding:80px 30px;text-align:center;border:1px solid var(--line);background:#fff}
+.empty-state h2{font-size:40px;margin-bottom:22px}
+.muted{color:var(--muted)}
+.detail-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px}
+.detail-visual{min-height:680px;background:linear-gradient(145deg,#e9dfcf,#cbb795);display:grid;place-items:center;position:sticky;top:110px}
+.detail-bottle{width:280px;height:430px;border-radius:16px 16px 42px 42px;background:linear-gradient(145deg,#fff,#d8c9b1);box-shadow:0 35px 70px rgba(35,27,17,.22);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:30px;position:relative}
+.detail-bottle:before{content:"";position:absolute;top:-62px;width:120px;height:70px;background:#171611;border-radius:8px 8px 2px 2px}
+.detail-bottle span{color:var(--gold);font-size:12px;letter-spacing:.2em}
+.detail-bottle strong{font-family:"Cormorant Garamond",serif;font-size:46px;line-height:1;margin:18px 0}
+.detail-bottle small{font-size:9px;letter-spacing:.2em}
+.detail-copy{padding:40px 0}
+.detail-meta{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.12em}
+.lead{font-size:18px;margin:30px 0 10px}
+.notes{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:36px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:24px 0}
+.notes small{font-size:9px;letter-spacing:.18em;color:var(--gold)}
+.notes p{font-size:12px;color:#514c44}
+.buy-box{margin-top:34px}
+.buy-box h2{font-size:34px;margin-bottom:18px}
+.price-pending,.payment-note{padding:18px;border:1px solid var(--line);background:#efe7d8;color:#5f574c;font-size:13px}
+.size-buy-row{display:grid;grid-template-columns:1fr auto auto;gap:18px;align-items:center;border-top:1px solid var(--line);padding:17px 0}
+.size-buy-row div{display:flex;flex-direction:column}
+.size-buy-row small{color:var(--muted)}
+.price{font-family:"Cormorant Garamond",serif;font-size:26px}
+.narrow{max-width:1050px}
+.cart-line{display:grid;grid-template-columns:1fr auto auto auto;align-items:center;gap:24px;padding:22px 0;border-bottom:1px solid var(--line)}
+.cart-line>div{display:flex;flex-direction:column}
+.cart-line a{font-family:"Cormorant Garamond",serif;font-size:27px}
+.cart-line small{color:var(--muted)}
+.cart-line form{display:flex;align-items:center;gap:8px}
+.qty{width:76px;padding:8px}
+.text-button{border:0;background:transparent;text-decoration:underline;color:var(--muted)}
+.cart-total{margin-top:28px;display:flex;justify-content:space-between;font-size:20px;padding-top:22px;border-top:1px solid var(--ink)}
+.cart-total strong{font-family:"Cormorant Garamond",serif;font-size:34px}
+.checkout-button{margin-top:24px;float:right}
+.checkout-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:70px}
+.lux-form{display:flex;flex-direction:column;gap:18px}
+.lux-form label{display:flex;flex-direction:column;gap:7px;font-size:11px;text-transform:uppercase;letter-spacing:.12em}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-errors{color:#912d2d;background:#f3dddd;padding:10px 14px}
+.order-summary{background:#ece2d2;padding:32px;height:max-content}
+.order-summary h2{font-size:38px;margin-bottom:22px}
+.summary-line{display:flex;justify-content:space-between;gap:18px;padding:12px 0;border-bottom:1px solid rgba(17,16,13,.12);font-size:12px}
+.success-page,.login-page{min-height:100vh;display:grid;place-items:center;background:linear-gradient(135deg,#f5f1ea,#d5c2a5);padding:30px}
+.success-page>div,.login-card{background:#fff;padding:54px;max-width:650px;width:100%;box-shadow:var(--shadow)}
+.login-card{display:flex;flex-direction:column;gap:16px}
+.login-card label{display:flex;flex-direction:column;gap:6px;font-size:11px;text-transform:uppercase;letter-spacing:.12em}
+.login-card input{padding:13px;border:1px solid var(--line)}
+.chat-launcher{position:fixed;right:26px;bottom:24px;width:58px;height:58px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:#11100d;color:#d6b36f;font-size:23px;box-shadow:0 16px 40px rgba(0,0,0,.25);z-index:80}
+.chat-panel{position:fixed;right:24px;bottom:94px;width:min(390px,calc(100vw - 32px));background:#f8f4ec;border:1px solid rgba(17,16,13,.16);box-shadow:0 24px 80px rgba(0,0,0,.24);z-index:80}
+.chat-header{background:#15130f;color:#fff;padding:18px;display:flex;justify-content:space-between;align-items:center}
+.chat-header div{display:flex;flex-direction:column}
+.chat-header small{color:#b99047;font-size:8px;letter-spacing:.18em}
+.chat-header button{background:transparent;border:0;color:#fff;font-size:24px}
+.chat-messages{height:300px;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:10px}
+.chat-message{max-width:85%;padding:11px 13px;font-size:12px;line-height:1.5}
+.chat-message.bot{background:#e8ddca;align-self:flex-start}
+.chat-message.user{background:#171510;color:#fff;align-self:flex-end}
+.chat-message a{text-decoration:underline}
+.chat-suggestions{display:flex;gap:6px;padding:0 14px 12px;flex-wrap:wrap}
+.chat-suggestions button{border:1px solid var(--line);background:#fff;padding:6px 8px;font-size:10px}
+.chat-form{display:flex;border-top:1px solid var(--line)}
+.chat-form input{flex:1;border:0;padding:14px;background:#fff;outline:none}
+.chat-form button{border:0;background:#171510;color:#fff;padding:0 18px}
+.admin-body{background:#ecebe7}
+.admin-header{background:#15140f;color:#fff;position:static}
+.admin-header>div{display:flex;align-items:center;gap:20px}
+.admin-shell{max-width:1550px}
+.admin-title{align-items:center}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:26px}
+.stat-grid article{background:#fff;padding:28px;border:1px solid #ddd9d0}
+.stat-grid small{display:block;text-transform:uppercase;letter-spacing:.14em;color:#777;font-size:9px}
+.stat-grid strong{font-family:"Cormorant Garamond",serif;font-size:48px}
+.admin-panel{background:#fff;padding:28px;border:1px solid #ddd9d0;margin-bottom:24px}
+.panel-heading{align-items:start;margin-bottom:20px}
+.panel-heading h2{font-size:34px}
+.panel-heading p{font-size:12px;color:#777}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:14px 12px;border-bottom:1px solid #ece9e2;font-size:12px;vertical-align:middle}
+th{font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:#777}
+td strong,td small{display:block}
+.mini-pill{display:inline-block;margin:2px}
+.status{padding:4px 8px;background:#e7e1d6;font-size:9px;text-transform:uppercase}
+.status-on{background:#dfe9dc;color:#36552d}
+.check-row{display:flex;gap:30px}
+.check-row label{flex-direction:row;align-items:center}
+.admin-size-row{display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:end;border-top:1px solid #ece9e2;padding:18px 0}
+.admin-size-row>div{display:flex;flex-direction:column}
+.inline-size-form{display:grid;grid-template-columns:1fr 1fr auto auto;gap:12px;align-items:end}
+.inline-check{flex-direction:row!important;align-items:center;padding-bottom:12px}
+.add-size-form{display:flex;gap:12px;align-items:end;margin-top:20px}
+.add-size-form label{display:flex;flex-direction:column;font-size:10px;text-transform:uppercase;letter-spacing:.12em}
+.add-size-form input{padding:11px;border:1px solid #ddd}
+@media(max-width:1100px){.product-grid{grid-template-columns:repeat(3,1fr)}.hero{grid-template-columns:1fr;min-height:auto}.hero-art{height:420px}.detail-layout{grid-template-columns:1fr}.detail-visual{position:relative;top:auto;min-height:560px}.checkout-grid{grid-template-columns:1fr}.collection-strip{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.site-header{height:auto;padding:18px 20px;align-items:flex-start;gap:18px}.site-header nav{gap:12px;flex-wrap:wrap;justify-content:flex-end}.site-header nav a:nth-child(2),.site-header nav a:nth-child(3),.site-header nav a:nth-child(4){display:none}.brand{font-size:17px}.hero{padding:70px 22px}.hero-art{height:330px;gap:8px}.bottle{width:92px}.bottle-left{height:210px}.bottle-center{height:290px}.bottle-right{height:230px}.bottle:before{height:48px;top:-40px}.product-grid{grid-template-columns:repeat(2,1fr);gap:10px}.product-visual{height:230px}.perfume-placeholder{width:105px;height:155px}.perfume-placeholder strong{font-size:17px}.product-card-body{padding:14px}.collection-strip{grid-template-columns:1fr}.assistant-banner{margin:40px 16px;padding:34px;display:block}.assistant-banner .button{margin-top:18px}.site-footer{grid-template-columns:1fr}.catalog-toolbar{grid-template-columns:1fr}.notes{grid-template-columns:1fr}.size-buy-row{grid-template-columns:1fr auto}.size-buy-row .button{grid-column:1/-1}.cart-line{grid-template-columns:1fr auto}.cart-line>strong{grid-column:2}.form-grid{grid-template-columns:1fr}.stat-grid{grid-template-columns:1fr}.admin-size-row{grid-template-columns:1fr}.inline-size-form{grid-template-columns:1fr 1fr}.inline-size-form .button{grid-column:1/-1}.page-shell,.section,.admin-shell{padding:60px 18px}}
