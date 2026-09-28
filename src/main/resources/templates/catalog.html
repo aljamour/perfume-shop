@@ -1,6 +1,175 @@
-<!doctype html><html lang="da" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Kollektion | Luksus Parfumer</title><link rel="stylesheet" th:href="@{/css/site.css}"></head><body>
-<header class="site-header"><a class="brand" th:href="@{/}"><span>♔</span>LUKSUS PARFUMER</a><nav><a th:href="@{/}">Forside</a><a th:href="@{/cart}">Kurv</a></nav></header>
-<main class="page-shell"><section class="page-intro"><p class="eyebrow">KOLLEKTIONEN</p><h1>Find din næste signaturduft.</h1><p>Søg efter duft, mærkereference eller filtrér efter herre, kvinde og unisex.</p></section>
-<form class="catalog-toolbar" method="get" th:action="@{/catalog}"><input type="search" name="q" th:value="${query}" placeholder="Søg fx Sauvage, Tom Ford eller Aventus"><select name="gender"><option value="">Alle</option><option value="MEN" th:selected="${selectedGender != null and selectedGender.name() == 'MEN'}">Herrer</option><option value="WOMEN" th:selected="${selectedGender != null and selectedGender.name() == 'WOMEN'}">Kvinder</option><option value="UNISEX" th:selected="${selectedGender != null and selectedGender.name() == 'UNISEX'}">Unisex</option></select><button class="button button-primary" type="submit">Filtrér</button></form>
-<div class="product-grid" th:if="${!perfumes.isEmpty()}"><article class="product-card" th:each="perfume : ${perfumes}"><a th:href="@{'/perfumer/' + ${perfume.slug}}" class="product-visual"><div class="perfume-placeholder"><span th:text="${perfume.perfumeNumber}">001</span><strong th:text="${perfume.name}">Duft</strong></div></a><div class="product-card-body"><p class="product-brand" th:text="${perfume.brand}">Brand</p><h3><a th:href="@{'/perfumer/' + ${perfume.slug}}" th:text="${perfume.name}">Parfume</a></h3><p th:text="${perfume.gender.displayName}">Unisex</p><div class="size-pills"><span th:each="size : ${perfume.sizes}" th:text="${size.ml + ' ml'}">30 ml</span></div><p class="muted" th:if="${perfume.sizes.?[sellingPrice != null].isEmpty()}">Pris fastsættes i administrationen</p></div></article></div>
-<div class="empty-state" th:if="${perfumes.isEmpty()}"><h2>Ingen dufte matchede din søgning.</h2><a th:href="@{/catalog}">Nulstil filtre</a></div></main></body></html>
+<!doctype html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Parfumekatalog | Luksus Parfumer</title>
+    <meta name="description" content="Udforsk parfumekataloget efter anledning, sæson og duftprofil. Se detaljer eller læg en tilgængelig størrelse direkte i kurven.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/site.css}">
+</head>
+<body>
+<header class="site-header">
+    <a class="brand" th:href="@{/}"><span>♔</span>LUKSUS PARFUMER</a>
+    <nav>
+        <a th:href="@{/}">Forside</a>
+        <a th:href="@{/catalog}">Katalog</a>
+        <a th:href="@{/cart}">Kurv</a>
+    </nav>
+</header>
+
+<main class="catalog-page">
+    <section class="catalog-cover">
+        <div>
+            <p class="eyebrow">PARFUMEKATALOG</p>
+            <h1>Find duften til øjeblikket.</h1>
+            <p>Det digitale katalog bygger videre på dit oprindelige katalog: kollektioner efter anledning og sæson, men nu kan hver duft åbnes, søges og købes direkte, når admin har aktiveret pris og lager.</p>
+        </div>
+        <div class="catalog-cover-mark">
+            <span>COLLECTION</span>
+            <strong>2026</strong>
+        </div>
+    </section>
+
+    <section class="catalog-controls">
+        <form class="catalog-toolbar" method="get" th:action="@{/catalog}">
+            <input type="search" name="q" th:value="${query}" placeholder="Søg fx Sauvage, Tom Ford, vanilje...">
+            <select name="gender">
+                <option value="">Alle</option>
+                <option value="MEN" th:selected="${selectedGender != null and selectedGender.name() == 'MEN'}">Herrer</option>
+                <option value="WOMEN" th:selected="${selectedGender != null and selectedGender.name() == 'WOMEN'}">Kvinder</option>
+                <option value="UNISEX" th:selected="${selectedGender != null and selectedGender.name() == 'UNISEX'}">Unisex</option>
+            </select>
+            <button class="button button-primary" type="submit">Søg</button>
+        </form>
+        <a class="catalog-reset" th:if="${filtering}" th:href="@{/catalog}">Nulstil filtre</a>
+    </section>
+
+    <section class="catalog-section" th:if="${!filtering}" th:each="entry, sectionStat : ${catalogSections}">
+        <div class="catalog-section-heading">
+            <div>
+                <span class="catalog-section-number" th:text="${#numbers.formatInteger(sectionStat.index + 1, 2)}">01</span>
+                <p class="eyebrow">KOLLEKTION</p>
+                <h2 th:text="${entry.key.name}">Mest populære</h2>
+                <p th:text="${entry.key.description}">Beskrivelse</p>
+            </div>
+            <span class="catalog-rule"></span>
+        </div>
+
+        <div class="catalog-product-grid">
+            <article class="catalog-product" th:each="perfume : ${entry.value}">
+                <a class="catalog-product-visual" th:href="@{'/perfumer/' + ${perfume.slug}}">
+                    <div class="catalog-bottle">
+                        <small th:text="${perfume.perfumeNumber}">001</small>
+                        <strong th:text="${perfume.name}">Duft</strong>
+                        <span>EXTRAIT</span>
+                    </div>
+                </a>
+
+                <div class="catalog-product-copy">
+                    <div class="catalog-product-topline">
+                        <p class="product-brand" th:text="${perfume.brand}">Brand</p>
+                        <span th:text="${perfume.gender.displayName}">Unisex</span>
+                    </div>
+                    <h3 th:text="${perfume.name}">Parfume</h3>
+
+                    <div class="catalog-note-preview" th:if="${!perfume.scentNotes.isEmpty()}">
+                        <span th:each="note, iter : ${perfume.scentNotes}" th:if="${iter.index < 4}" th:text="${note.noteName}">Vanilje</span>
+                    </div>
+
+                    <div class="catalog-sizes">
+                        <span th:each="size : ${perfume.sizes}" th:text="${size.ml + ' ml'}">30 ml</span>
+                    </div>
+
+                    <div class="catalog-card-actions">
+                        <a class="catalog-details-link" th:href="@{'/perfumer/' + ${perfume.slug}}">Se detaljer →</a>
+
+                        <form class="catalog-quick-buy"
+                              method="post"
+                              th:action="@{/cart/add}"
+                              th:if="${!perfume.sizes.?[sellingPrice != null and stockQuantity > 0 and active].isEmpty()}">
+                            <select name="sizeId" aria-label="Vælg størrelse">
+                                <option th:each="size : ${perfume.sizes}"
+                                        th:if="${size.sellingPrice != null and size.stockQuantity > 0 and size.active}"
+                                        th:value="${size.id}"
+                                        th:text="${size.ml + ' ml · ' + #numbers.formatDecimal(size.sellingPrice, 1, 2) + ' kr.'}">
+                                    30 ml
+                                </option>
+                            </select>
+                            <button type="submit">Læg i kurv</button>
+                        </form>
+
+                        <span class="catalog-price-pending"
+                              th:if="${perfume.sizes.?[sellingPrice != null and stockQuantity > 0 and active].isEmpty()}">
+                            Pris/lager afventer admin
+                        </span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section class="catalog-section catalog-all-products">
+        <div class="catalog-section-heading">
+            <div>
+                <span class="catalog-section-number">∞</span>
+                <p class="eyebrow" th:text="${filtering ? 'SØGERESULTATER' : 'HELE KATALOGET'}">HELE KATALOGET</p>
+                <h2 th:text="${filtering ? 'Matchende dufte' : 'Alle dufte'}">Alle dufte</h2>
+                <p th:text="${filtering ? perfumes.size() + ' produkter matcher dine filtre.' : 'Samtlige nummererede dufte fra leverandørkataloget.'}"></p>
+            </div>
+            <span class="catalog-rule"></span>
+        </div>
+
+        <div class="catalog-product-grid" th:if="${!perfumes.isEmpty()}">
+            <article class="catalog-product catalog-product-compact" th:each="perfume : ${perfumes}">
+                <a class="catalog-product-visual" th:href="@{'/perfumer/' + ${perfume.slug}}">
+                    <div class="catalog-bottle">
+                        <small th:text="${perfume.perfumeNumber}">001</small>
+                        <strong th:text="${perfume.name}">Duft</strong>
+                        <span>EXTRAIT</span>
+                    </div>
+                </a>
+
+                <div class="catalog-product-copy">
+                    <p class="product-brand" th:text="${perfume.brand}">Brand</p>
+                    <h3 th:text="${perfume.name}">Parfume</h3>
+                    <div class="catalog-sizes">
+                        <span th:each="size : ${perfume.sizes}" th:text="${size.ml + ' ml'}">30 ml</span>
+                    </div>
+
+                    <div class="catalog-card-actions">
+                        <a class="catalog-details-link" th:href="@{'/perfumer/' + ${perfume.slug}}">Se detaljer →</a>
+
+                        <form class="catalog-quick-buy"
+                              method="post"
+                              th:action="@{/cart/add}"
+                              th:if="${!perfume.sizes.?[sellingPrice != null and stockQuantity > 0 and active].isEmpty()}">
+                            <select name="sizeId">
+                                <option th:each="size : ${perfume.sizes}"
+                                        th:if="${size.sellingPrice != null and size.stockQuantity > 0 and size.active}"
+                                        th:value="${size.id}"
+                                        th:text="${size.ml + ' ml · ' + #numbers.formatDecimal(size.sellingPrice, 1, 2) + ' kr.'}">
+                                </option>
+                            </select>
+                            <button type="submit">Læg i kurv</button>
+                        </form>
+
+                        <span class="catalog-price-pending"
+                              th:if="${perfume.sizes.?[sellingPrice != null and stockQuantity > 0 and active].isEmpty()}">
+                            Pris/lager afventer admin
+                        </span>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <div class="empty-state" th:if="${perfumes.isEmpty()}">
+            <h2>Ingen dufte matchede din søgning.</h2>
+            <a th:href="@{/catalog}">Nulstil filtre</a>
+        </div>
+    </section>
+</main>
+</body>
+</html>
