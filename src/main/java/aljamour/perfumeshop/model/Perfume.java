@@ -1,4 +1,4 @@
-package dk.perfumeshop.model;
+package aljamour.perfumeshop.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

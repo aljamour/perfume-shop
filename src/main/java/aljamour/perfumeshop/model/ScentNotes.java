@@ -1,4 +1,4 @@
-package dk.perfumeshop.model;
+package aljamour.perfumeshop.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
