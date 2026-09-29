@@ -33,6 +33,13 @@
         </div>
     </section>
 
+    <nav class="catalog-index" th:if="${!filtering}" aria-label="Katalogsektioner">
+        <a th:each="entry : ${catalogSections}"
+           th:href="@{'#section-' + ${entry.key.slug}}"
+           th:text="${entry.key.name}">Sektion</a>
+        <a href="#all-products">Alle dufte</a>
+    </nav>
+
     <section class="catalog-controls">
         <form class="catalog-toolbar" method="get" th:action="@{/catalog}">
             <input type="search" name="q" th:value="${query}" placeholder="Søg fx Sauvage, Tom Ford, vanilje...">
@@ -47,7 +54,10 @@
         <a class="catalog-reset" th:if="${filtering}" th:href="@{/catalog}">Nulstil filtre</a>
     </section>
 
-    <section class="catalog-section" th:if="${!filtering}" th:each="entry, sectionStat : ${catalogSections}">
+    <section class="catalog-section"
+             th:if="${!filtering}"
+             th:each="entry, sectionStat : ${catalogSections}"
+             th:id="${'section-' + entry.key.slug}">
         <div class="catalog-section-heading">
             <div>
                 <span class="catalog-section-number" th:text="${#numbers.formatInteger(sectionStat.index + 1, 2)}">01</span>
@@ -111,7 +121,7 @@
         </div>
     </section>
 
-    <section class="catalog-section catalog-all-products">
+    <section class="catalog-section catalog-all-products" id="all-products">
         <div class="catalog-section-heading">
             <div>
                 <span class="catalog-section-number">∞</span>
